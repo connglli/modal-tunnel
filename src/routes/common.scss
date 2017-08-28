@@ -1,0 +1,37 @@
+.nav {
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+  padding: 1rem;
+
+  a {
+    font-size: 1rem;
+    border-bottom: 2px solid #ffd63d;
+    margin: 1rem;
+  }
+}
+
+.normal {
+  font-family: Georgia, sans-serif;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: normal;
+  letter-spacing: -1px;
+}
+
+.list {
+  font-size: 1.2em;
+  list-style: none;
+  line-height: 1.5em;
+}
+
+.list code {
+  background: #f7f7f7;
+}
+
+.button {
+  margin: 1em;
+}

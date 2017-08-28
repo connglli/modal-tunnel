@@ -28,6 +28,7 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map', // source map
   devServer: devServer,
   entry: [
+    'babel-polyfill',
     'react-hot-loader/patch',
     path.join(__dirname, 'src/index.js')
   ],
@@ -48,7 +49,8 @@ module.exports = {
         use: {
           loader: 'eslint-loader',
           options: {
-            cache: true // allow eslint to cache its temp result into node_modules/.cache
+            cache: true, // allow eslint to cache its temp result into node_modules/.cache
+            configFile: path.join(__dirname, '.eslintrc.json')
           }
         }
       },
@@ -63,14 +65,22 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               presets: [ ['es2015', { modules: false }], 'react' ],
-              plugins: [ 'transform-async-to-generator', 'transform-class-properties', 'react-hot-loader/babel' ]
+              plugins: [
+                'transform-async-to-generator',
+                'transform-class-properties',
+                'transform-object-rest-spread',
+                'react-hot-loader/babel',
+                [ 'import', {
+                  libraryName: 'antd',
+                  style: 'css'
+                }]
+              ]
             }
           }
         ]
       },
       {
-        test: /\.(css|sass|scss)$/,
-        exclude: /node_modules/,
+        test: /\.(sass|scss)$/,
         use: cssPlugin.extract({
           fallback: { loader: 'style-loader' },
           use: [
@@ -83,7 +93,73 @@ module.exports = {
             { loader: 'sass-loader' }
           ]
         })
-      }
+      },
+      {
+        test: /\.css$/,
+        use: cssPlugin.extract({
+          fallback: { loader: 'style-loader' },
+          use: 'css-loader'
+        })
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: `url-loader'`,
+          options: {
+            limit: 10000,
+            minetype: 'application/font-woff'
+          }
+        },
+      },
+      {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            minetype: 'application/font-woff'
+          }
+        }
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            minetype: 'application/octet-stream'
+          }
+        }
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            minetype: 'application/vnd.ms-fontobject'
+          }
+        }
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            minetype: 'image/svg+xml'
+          }
+        }
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000
+          }
+        }
+      },
     ]
   }
 }
